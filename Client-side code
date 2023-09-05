@@ -3,40 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locate a Socket</title>
-    <!-- Add Materialize CSS and JavaScript libraries here -->
-    <!-- Include your styling and JavaScript code -->
+    <title>Socket.IO Chat</title>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Locate a Socket</h1>
-    </header>
-    
-    <main>
-        <section id="search-section">
-            <h2>Find Charging Stations</h2>
-            <label for="location">Enter Location:</label>
-            <input type="text" id="location" placeholder="Enter your location">
-            <button onclick="searchChargingStations()">Search</button>
-        </section>
-        
-        <section id="charging-stations">
-            <!-- Display charging station information here -->
-        </section>
-    </main>
-    
-    <footer>
-        <p>&copy; 2023 Locate a Socket</p>
-    </footer>
-    
-    <!-- Include Materialize and your custom JavaScript files -->
+    <ul id="messages"></ul>
+    <input id="message-input" autocomplete="off" /><button id="send-button">Send</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        const messagesList = document.getElementById('messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            socket.emit('chat message', message);
+            messageInput.value = '';
+        });
+
+        socket.on('chat message', (message) => {
+            const li = document.createElement('li');
+            li.textContent = message;
+            messagesList.appendChild(li);
+        });
+    </script>
 </body>
 </html>
-
-<script>
-    // JavaScript code for client-side functionality
-    function searchChargingStations() {
-        // Perform an AJAX request to the server to fetch charging stations based on user input
-        // Update the 'charging-stations' section with the results
-    }
-</script>
