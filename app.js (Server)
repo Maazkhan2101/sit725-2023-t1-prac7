@@ -1,0 +1,24 @@
+const express = require('express');
+const app = express();
+const port = 3000; // Choose an appropriate port
+
+app.use(express.static('public')); // Serve static files from 'public' directory
+
+// Define routes for handling charging station data (replace with actual logic)
+app.get('/api/charging-stations', (req, res) => {
+    const chargingStations = [
+        {
+            name: 'Station A',
+            location: '123 Main St',
+            chargingSpeed: 'Fast',
+            cost: '$2.50 per hour',
+            availability: 'Available',
+        },
+        // Add more charging stations here
+    ];
+    res.json(chargingStations);
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
