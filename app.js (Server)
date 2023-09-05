@@ -1,24 +1,28 @@
-const express = require('express');
-const app = express();
-const port = 3000; // Choose an appropriate port
+const http = require('http');
+const socketIo = require('socket.io');
 
-app.use(express.static('public')); // Serve static files from 'public' directory
-
-// Define routes for handling charging station data (replace with actual logic)
-app.get('/api/charging-stations', (req, res) => {
-    const chargingStations = [
-        {
-            name: 'Station A',
-            location: '123 Main St',
-            chargingSpeed: 'Fast',
-            cost: '$2.50 per hour',
-            availability: 'Available',
-        },
-        // Add more charging stations here
-    ];
-    res.json(chargingStations);
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Socket.IO server');
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  socket.on('chat message', (message) => {
+    // Broadcast the received message to all connected clients
+    io.emit('chat message', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+const port = process.env.PORT || 3000;
+
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
